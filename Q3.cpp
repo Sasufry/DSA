@@ -3,17 +3,20 @@ using namespace std;
 
 int linearMissing(int arr[], int n)
 {
-    for (int i = 1; i <= n + 1; i++)
-    {
-        bool found = false;
-        for (int j = 0; j < n; j++)
-            if (arr[j] == i)
-                found = true;
-        if (!found)
-            return i;
-    }
-    return -1;
+    
+       int sum = n*(n+1)/2;
+       int sum_2 = 0;
+       for(int i = 0 ; i < n; i++)
+       {
+           sum_2 += arr[i];
+       }
+       return sum - sum_2;
+       
 }
+
+
+
+
 
 int binaryMissing(int arr[], int n)
 {
@@ -34,4 +37,5 @@ int main()
     int arr[] = {1, 2, 3, 4, 6}, n = 5;
     cout << "Linear: " << linearMissing(arr, n) << "\n";
     cout << "Binary: " << binaryMissing(arr, n) << "\n";
+
 }
