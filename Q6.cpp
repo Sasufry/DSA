@@ -1,81 +1,75 @@
 #include <iostream>
 using namespace std;
 
-struct Triplet {
-    int row, col, val;
+class triplet {
+    public:
+    int row;
+    int column;
+    int val;
 };
-
-void printTriplet(Triplet mat[], int size) {
-    cout << "Row Col Val\n";
-    for (int i = 0; i < size; i++) {
-        cout << mat[i].row << "   " << mat[i].col << "   " << mat[i].val << endl;
+void transposeMatrix(triplet a[], triplet b[], int count)
+{
+    for(int i = 0 ; i < count ; i++)
+    {
+         b[i].column = a[i].row ;
+         b[i].row = a[i].column;
+         b[i].val = a[i].val;
     }
 }
 
-void transpose(Triplet mat[], Triplet trans[], int size) {
-    for (int i = 0; i < size; i++) {
-        trans[i].row = mat[i].col;
-        trans[i].col = mat[i].row;
-        trans[i].val = mat[i].val;
+void display(triplet a[], int count)
+{
+    cout<<"i\tj\tval\t";
+    cout<<endl;
+    for(int i = 0 ; i < count ; i++)
+    {
+        cout<<a[i].row<<"\t"<<a[i].column<<"\t"<<a[i].val;
+        cout<<endl;
     }
 }
+int main() {
+    int a[100][100];
+    int n, m;
+    int count = 0;
 
-int add(Triplet A[], int sizeA, Triplet B[], int sizeB, Triplet C[]) {
-    int i = 0, j = 0, k = 0;
-    while (i < sizeA && j < sizeB) {
-        if (A[i].row < B[j].row || (A[i].row == B[j].row && A[i].col < B[j].col))
-            C[k++] = A[i++];
-        else if (B[j].row < A[i].row || (B[j].row == A[i].row && B[j].col < A[i].col))
-            C[k++] = B[j++];
-        else {
-            C[k] = A[i];
-            C[k++].val = A[i++].val + B[j++].val;
+    cout << "Enter number of rows of matrix: ";
+    cin >> n;
+
+    cout << "Enter number of columns of matrix: ";
+    cin >> m;
+
+    triplet elements[n * m];  // Maximum possible non-zero elements
+
+    cout << "Enter matrix elements:\n";
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cin >> a[i][j];
         }
     }
-    while (i < sizeA) C[k++] = A[i++];
-    while (j < sizeB) C[k++] = B[j++];
-    return k;
-}
 
-int multiply(Triplet A[], int sizeA, Triplet B[], int sizeB, Triplet C[]) {
-    int k = 0;
-    for (int i = 0; i < sizeA; i++) {
-        for (int j = 0; j < sizeB; j++) {
-            if (A[i].col == B[j].row) {
-                C[k].row = A[i].row;
-                C[k].col = B[j].col;
-                C[k].val = A[i].val * B[j].val;
-                k++;
+    // Store non-zero elements as triplets
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (a[i][j] != 0) {
+                elements[count].row = i;
+                elements[count].column = j;
+                elements[count].val = a[i][j];
+                count++;
             }
         }
     }
-    return k;
-}
+    
+    cout << "\nNon-zero elements in triplet form (row, column, value):\n";
 
-int main() {
-    Triplet A[] = {{0, 0, 1}, {0, 2, 2}, {1, 1, 3}};
-    Triplet B[] = {{0, 1, 4}, {1, 1, 5}, {2, 0, 6}};
-    int sizeA = 3, sizeB = 3;
+    display(elements,count);
 
-    cout << "Matrix A in Triplet form:\n";
-    printTriplet(A, sizeA);
-    cout << "\nMatrix B in Triplet form:\n";
-    printTriplet(B, sizeB);
 
-    Triplet T[10];
-    transpose(A, T, sizeA);
-    cout << "\nTranspose of A:\n";
-    printTriplet(T, sizeA);
-
-    Triplet C[20];
-    int sizeC = add(A, sizeA, B, sizeB, C);
-    cout << "\nAddition (A + B):\n";
-    printTriplet(C, sizeC);
-
-    Triplet M[20];
-    int sizeM = multiply(A, sizeA, B, sizeB, M);
-    cout << "\nMultiplication (A * B):\n";
-    printTriplet(M, sizeM);
-
+    //For Transpose
+    triplet trans[m*n];
+    transposeMatrix(elements , trans , count);
+    cout<<endl<<"Transpose Matrix : ";
+    cout<<endl;
+    display(trans,count);
+    
     return 0;
 }
